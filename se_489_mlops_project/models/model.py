@@ -1,26 +1,21 @@
-import torch
+import keras
+from keras.layers import Activation
+from keras.layers import Conv2D, BatchNormalization, Dense, Flatten, Reshape
 
-class MyNeuralNet(torch.nn.Module):
-    """ Basic neural network class. 
-    
-    Args:
-        in_features: number of input features
-        out_features: number of output features
-    
-    """
-    def __init__(self, in_features: int, out_features: int) -> None:
-        self.l1 = torch.nn.Linear(in_features, 500)
-        self.l2 = torch.nn.Linear(500, out_features)
-        self.r = torch.nn.ReLU()
-    
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Forward pass of the model.
-        
-        Args:
-            x: input tensor expected to be of shape [N,in_features]
+def get_model():
 
-        Returns:
-            Output tensor with shape [N,out_features]
+    model = keras.models.Sequential()
 
-        """
-        return self.l2(self.r(self.l1(x)))
+    model.add(Conv2D(64, kernel_size=(3,3), activation='relu', padding='same', input_shape=(9,9,1)))
+    model.add(BatchNormalization())
+    model.add(Conv2D(64, kernel_size=(3,3), activation='relu', padding='same'))
+    model.add(BatchNormalization())
+    model.add(Conv2D(128, kernel_size=(1,1), activation='relu', padding='same'))
+
+    model.add(Flatten())
+    model.add(Dense(81*9))
+    model.add(Reshape((-1, 9)))
+    model.add(Activation('softmax'))
+    
+    return model
+ 

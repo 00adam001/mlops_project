@@ -30,19 +30,48 @@ MLOps pipeline setup for SE 489 — Spring 2025
 
 ## 3. Project Architecture Diagram
 
-* [x] Inserted architecture diagram as a visual PNG file (see below).
-
-![Project Architecture Diagram](reports/figures/architecture_diagram.png)
-
-> This diagram illustrates the complete end-to-end machine learning workflow:
->
-> * **Input Layer:** Raw image of a Sudoku puzzle
-> * **Preprocessing Module:** OpenCV-based image processing and grid detection
-> * **Digit Recognition Module:** CNN-based digit classification (trained on MNIST)
-> * **Puzzle Solver Module:** Inference model trained on Kaggle datasets
-> * **Visualization & Output:** Displays the completed puzzle
->
-> The diagram also reflects key MLOps components: dataset pipeline, containerized scripts, and modular code organization supporting continuous integration and deployment.
+                      ┌────────────────────────────────────┐
+                      │         Raw Input Image            │
+                      │  - Captured or uploaded Sudoku     │
+                      │  - Format: .jpg / .png             │
+                      └──────────────┬─────────────────────┘
+                                     │
+                                     ▼
+                      ┌────────────────────────────────────┐
+                      │      Preprocessing Module          │
+                      │  Tools: OpenCV                     │
+                      │  - Convert to grayscale            │
+                      │  - Gaussian blurring               │
+                      │  - Adaptive thresholding           │
+                      │  - Detect largest contour (grid)   │
+                      │  - Warp perspective to 9x9 square  │
+                      └──────────────┬─────────────────────┘
+                                     │
+                                     ▼
+                      ┌────────────────────────────────────┐
+                      │   Digit Recognition Module         │
+                      │  Model: CNN (Trained on MNIST)     │
+                      │  - Classifies digits 0–9           │
+                      │  - Handles 28x28 resized patches   │
+                      │  Output: Sparse 9x9 grid matrix    │
+                      └──────────────┬─────────────────────┘
+                                     │
+                                     ▼
+                      ┌────────────────────────────────────┐
+                      │     Puzzle Solver Module           │
+                      │  Model: Deep CNN (Kaggle Sudoku)   │
+                      │  - Predicts missing values         │
+                      │  - Output shape: (81, 9)           │
+                      │  - Argmax + reshape to 9x9         │
+                      └──────────────┬─────────────────────┘
+                                     │
+                                     ▼
+                      ┌────────────────────────────────────┐
+                      │     Visualization & Rendering      │
+                      │  - Overlay solved digits on image  │
+                      │  - Use OpenCV for rendering        │
+                      │  - Output: Completed Sudoku image  │
+                      └────────────────────────────────────┘
 
 ## 4. Phase Deliverables
 
@@ -102,5 +131,3 @@ pip install -r requirements.txt
 * `TensorFlow` / `Keras` – Model development and training
 
 ---
-
-**Tip:** Keep this README updated as your project evolves. Link to each phase deliverable and update the architecture diagram as your pipeline matures.

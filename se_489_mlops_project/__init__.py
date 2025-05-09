@@ -1,2 +1,1 @@
-from se_489_mlops_project.models.model import MyNeuralNet
-from se_489_mlops_project.predict_model import predict
+

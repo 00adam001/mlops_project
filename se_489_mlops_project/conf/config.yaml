@@ -1,0 +1,12 @@
+defaults:
+  - override hydra/job_logging: disabled
+
+data:
+  source: data/raw/sudoku.csv
+  pickle_path: data/processed/sudoku_data.pickle
+
+model:
+  learning_rate: 0.001
+  batch_size: 32
+  epochs: 2
+  save_path: models/sudoku_model.h5

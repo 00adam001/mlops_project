@@ -1,0 +1,5 @@
+outs:
+- md5: 641ecf923184969c903215cb4dece8c1
+  size: 91322260
+  hash: md5
+  path: sudoku_model.h5

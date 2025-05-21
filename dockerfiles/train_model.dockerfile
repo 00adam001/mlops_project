@@ -7,11 +7,14 @@ RUN apt update && \
 
 COPY requirements.txt requirements.txt
 COPY pyproject.toml pyproject.toml
-COPY se_489_mlops_projec/ se_489_mlops_projec/
+COPY se_489_mlops_project/ se_489_mlops_project/
 COPY data/ data/
 
 WORKDIR /
-RUN pip install -r requirements.txt --no-cache-dir
-RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["python", "-u", "se_489_mlops_projec/train_model.py"]
+RUN pip install -r requirements.txt --no-cache-dir
+# RUN pip install . --no-deps --no-cache-dir
+
+ENTRYPOINT ["python", "-u", "se_489_mlops_project/training.py"]
+
+

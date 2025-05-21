@@ -1,2 +1,10 @@
-torch >= 2.1.0
+# torch >= 2.1.0
 gdown
+pandas
+numpy
+keras
+tensorflow
+hydra-core
+omegaconf
+scikit-learn
+prometheus_client

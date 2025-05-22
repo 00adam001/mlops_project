@@ -1,0 +1,15 @@
+artifact_uri: file:///app/mlruns/0/ddc33af4f1e646219a5759d2f9bf8506/artifacts
+end_time: 1747955394436
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ddc33af4f1e646219a5759d2f9bf8506
+run_name: casual-boar-577
+run_uuid: ddc33af4f1e646219a5759d2f9bf8506
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747955392916
+status: 3
+tags: []
+user_id: root

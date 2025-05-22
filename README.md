@@ -103,23 +103,27 @@ pip install -r requirements.txt
   docker run sudoku-predict
   ```
 
-  **Dataset Download Script**
+  **How to run The monitoring ,profiling and tracking**
+  Building image "docker build -t sudoku-solver -f dockerfiles/predict_model.dockerfile ."
+  Run this script " docker run --rm -p 8000:8000 -v "$PWD":/app sudoku-solver \
+  --image /app/data/raw/s.jpg \                  
+  --output /app/results/solved_sudoku.png"
 
-  ```python
-  import gdown
-  import os
+  Monitoring :- "http://0.0.0.0:8000/metrics "  
 
-  def download_from_gdrive(file_path='data/raw/sudoku.csv', file_id='12c_UTy7pXdzJkuL1HfVdaTP15Z8QZgA2'):
-      if not os.path.exists(file_path):
-          os.makedirs(os.path.dirname(file_path), exist_ok=True)
-          gdown.download(f"https://drive.google.com/uc?id={file_id}", file_path, quiet=False)
-  ```
+  Profiling :- "snakeviz profile_output.prof "
+
+  Tracking :- "mlflow ui" -- then navigate to "http://127.0.0.1:5000 "
+
+
+  FOR MAC :- curl http://localhost:8000/metrics | grep sudoku_
+
 
 ## 6. Contribution Summary
 
 * **Nishant Kashyap:** Designed and trained CNN models for digit classification and Sudoku solving.
-* **Nisarg Jatinkumar Patel:** Developed the image preprocessing pipeline using OpenCV and digit extraction logic.
-* **Narasimha Reddy Putta:** Led data acquisition, Docker containerization, and MLOps workflow setup.
+* **Nisarg Jatinkumar Patel:** Developed the image preprocessing pipeline using OpenCV and digit extraction logic , ML workflows , Monitoring.
+* **Narasimha Reddy Putta:** Led data acquisition, Docker containerization.
 
 ## 7. References
 

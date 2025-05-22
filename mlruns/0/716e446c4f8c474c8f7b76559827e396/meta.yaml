@@ -1,0 +1,15 @@
+artifact_uri: file:///app/mlruns/0/716e446c4f8c474c8f7b76559827e396/artifacts
+end_time: 1747955168735
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 716e446c4f8c474c8f7b76559827e396
+run_name: angry-horse-346
+run_uuid: 716e446c4f8c474c8f7b76559827e396
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747955167848
+status: 4
+tags: []
+user_id: root

@@ -1,0 +1,15 @@
+artifact_uri: file:///app/mlruns/0/bfc7f4cf50d14ccfba4fc2cbdeb9f8d1/artifacts
+end_time: 1747944288578
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: bfc7f4cf50d14ccfba4fc2cbdeb9f8d1
+run_name: glamorous-croc-106
+run_uuid: bfc7f4cf50d14ccfba4fc2cbdeb9f8d1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747944287183
+status: 3
+tags: []
+user_id: root

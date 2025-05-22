@@ -1,0 +1,15 @@
+artifact_uri: file:///app/mlruns/0/e2fba957f0c0459c810f7b3e060f70e1/artifacts
+end_time: 1747955276071
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e2fba957f0c0459c810f7b3e060f70e1
+run_name: overjoyed-moth-475
+run_uuid: e2fba957f0c0459c810f7b3e060f70e1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747955274562
+status: 3
+tags: []
+user_id: root

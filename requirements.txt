@@ -1,10 +1,6 @@
-# torch >= 2.1.0
-gdown
-pandas
 numpy
-keras
+opencv-python
 tensorflow
-hydra-core
-omegaconf
-scikit-learn
-prometheus_client
+matplotlib
+scikit-image
+pandas

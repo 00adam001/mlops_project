@@ -1,17 +1,24 @@
-# Base image
-FROM python:3.11-slim
+# Use official TensorFlow base image with all necessary libs
+FROM tensorflow/tensorflow:2.14.0
 
-RUN apt update && \
-    apt install --no-install-recommends -y build-essential gcc && \
-    apt clean && rm -rf /var/lib/apt/lists/*
+# Install system-level dependencies required by OpenCV
+RUN apt-get update && apt-get install -y libgl1 libglib2.0-0 && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt requirements.txt
-COPY pyproject.toml pyproject.toml
-COPY se_489_mlops_projec/ se_489_mlops_projec/
+# Set the working directory
+WORKDIR /app
+
+# Copy dependency management files
+COPY requirements.txt .
+COPY pyproject.toml .
+
+# Copy application code
+COPY se_489_mlops_project/ se_489_mlops_project/
 COPY data/ data/
+COPY models/ models/
 
-WORKDIR /
-RUN pip install -r requirements.txt --no-cache-dir
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["python", "-u", "mlops_project/se_489_mlops_project/predict.py"]
+# Entry point
+ENTRYPOINT ["python", "-u", "se_489_mlops_project/predict.py"]

@@ -131,3 +131,7 @@ pip install -r requirements.txt
 * `TensorFlow` / `Keras` – Model development and training
 
 ---
+
+
+
+To run the profile_output.prof :- `snakeviz profile_output.prof `

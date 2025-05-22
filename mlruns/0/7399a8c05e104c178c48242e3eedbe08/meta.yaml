@@ -1,0 +1,15 @@
+artifact_uri: file:///app/mlruns/0/7399a8c05e104c178c48242e3eedbe08/artifacts
+end_time: 1747955155081
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 7399a8c05e104c178c48242e3eedbe08
+run_name: mysterious-shrew-124
+run_uuid: 7399a8c05e104c178c48242e3eedbe08
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747955153585
+status: 3
+tags: []
+user_id: root

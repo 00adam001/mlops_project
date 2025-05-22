@@ -1,0 +1,15 @@
+artifact_uri: file:///app/mlruns/0/a985ed487ace4787bba6d7f9fd88dce0/artifacts
+end_time: 1747947677599
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a985ed487ace4787bba6d7f9fd88dce0
+run_name: brawny-hound-301
+run_uuid: a985ed487ace4787bba6d7f9fd88dce0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747947676119
+status: 3
+tags: []
+user_id: root

@@ -7,9 +7,9 @@ MLOps pipeline setup for SE 489 — Spring 2025
 * **Team Name:** Team 3
 * **Team Members (Name & Email):**
 
-    * Nishant Kashyap
-    * Nisarg Jatinkumar Patel
-    * Narasimha Reddy Putta
+    * Nishant Kashyap (nkashyap@depaull.edu)
+    * Nisarg Jatinkumar Patel (npate298@depaul.edu)
+    * Narasimha Reddy Putta (nputta@depaul.edu)
 * **Course & Section:** SE489: Machine Learning Engineering for Production (MLOps), Spring 2025
 
 ## 2. Project Overview
@@ -105,6 +105,7 @@ pip install -r requirements.txt
 
   **How to run The monitoring ,profiling and tracking**
   Building image "docker build -t sudoku-solver -f dockerfiles/predict_model.dockerfile ."
+  
   Run this script " docker run --rm -p 8000:8000 -v "$PWD":/app sudoku-solver \
   --image /app/data/raw/s.jpg \                  
   --output /app/results/solved_sudoku.png"

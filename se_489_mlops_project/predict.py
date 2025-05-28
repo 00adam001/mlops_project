@@ -11,6 +11,7 @@ from prometheus_client import start_http_server, Counter, Summary, Gauge
 from rich.logging import RichHandler
 from tensorflow.keras.models import load_model
 from se_489_mlops_project.puzzle_utils import find_puzzle, extract_digit
+from tensorflow.keras.optimizers import Adam
 
 # ======================
 # Setup
@@ -52,9 +53,12 @@ def norm(a):
 def denorm(a):
     return (a + 0.5) * 9
 
+
 def load_digit_model(model_path='models/digit_model.h5'):
     logger.info("Loading digit recognition model...")
-    return load_model(model_path)
+    model = load_model(model_path, compile=False)  # prevent loading outdated optimizer
+    model.compile(optimizer=Adam(), loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
 
 def identify_number(image, digit_model):
     image_resized = cv2.resize(image, (28, 28))
@@ -180,3 +184,22 @@ if __name__ == "__main__":
         logger.error(f"Fatal error: {str(e)}")
     finally:
         logger.info("Service terminated")
+        
+def solve_image(np_image):
+    """Testing wrapper: converts in-memory image to temp file."""
+    import uuid
+    import os
+    temp_id = str(uuid.uuid4())
+    input_path = f"_temp_{temp_id}_input.jpg"
+    output_path = f"_temp_{temp_id}_output.jpg"
+    
+    cv2.imwrite(input_path, np_image)
+    try:
+        result = process_sudoku(input_path, output_path)
+        return result
+    finally:
+        if os.path.exists(input_path):
+            os.remove(input_path)
+        if os.path.exists(output_path):
+            os.remove(output_path)
+

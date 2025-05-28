@@ -114,3 +114,11 @@ help:
 		printf "\n"; \
 	}' \
 	| more $(shell test $(shell uname) = Darwin && echo '--no-init --raw-control-chars')
+
+.PHONY: test
+
+test:
+	PYTHONPATH=$(pwd) /Users/nisargpatel/anaconda3/envs/sudokuenv/bin/python -m pytest tests/
+
+
+

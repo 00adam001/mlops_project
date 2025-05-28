@@ -1,0 +1,15 @@
+artifact_uri: file:///app/mlruns/0/f52d701f1cd1461c9047bb272eedc49f/artifacts
+end_time: 1748444082462
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: f52d701f1cd1461c9047bb272eedc49f
+run_name: trusting-gnat-450
+run_uuid: f52d701f1cd1461c9047bb272eedc49f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748444082453
+status: 3
+tags: []
+user_id: nisargpatel

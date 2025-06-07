@@ -3,7 +3,6 @@ import os
 import cv2
 import numpy as np
 import logging
-import matplotlib.pyplot as plt
 import time
 import cProfile
 import mlflow
@@ -127,7 +126,7 @@ def process_sudoku(image_path, output_path=None):
                 
             return solved_board
             
-    except Exception as e:
+    except Exception:
         ERROR_COUNT.inc()
         logger.exception("Processing failed")
         raise
@@ -188,7 +187,6 @@ if __name__ == "__main__":
 def solve_image(np_image):
     """Testing wrapper: converts in-memory image to temp file."""
     import uuid
-    import os
     temp_id = str(uuid.uuid4())
     input_path = f"_temp_{temp_id}_input.jpg"
     output_path = f"_temp_{temp_id}_output.jpg"

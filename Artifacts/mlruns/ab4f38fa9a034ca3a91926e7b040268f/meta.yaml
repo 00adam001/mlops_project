@@ -1,0 +1,15 @@
+artifact_uri: file:///app/mlruns/0/ab4f38fa9a034ca3a91926e7b040268f/artifacts
+end_time: 1749373990349
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ab4f38fa9a034ca3a91926e7b040268f
+run_name: trusting-mule-663
+run_uuid: ab4f38fa9a034ca3a91926e7b040268f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749373990340
+status: 3
+tags: []
+user_id: nisargpatel

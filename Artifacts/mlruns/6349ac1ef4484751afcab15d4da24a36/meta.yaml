@@ -1,0 +1,15 @@
+artifact_uri: file:///app/mlruns/0/6349ac1ef4484751afcab15d4da24a36/artifacts
+end_time: 1747940846680
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6349ac1ef4484751afcab15d4da24a36
+run_name: sedate-crane-429
+run_uuid: 6349ac1ef4484751afcab15d4da24a36
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747940845187
+status: 3
+tags: []
+user_id: root

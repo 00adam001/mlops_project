@@ -1,28 +1,34 @@
-# ✅ Use prebuilt TensorFlow image to skip huge pip install
-FROM tensorflow/tensorflow:2.14.0
+FROM python:3.11-slim
 
-# ✅ Install system dependencies for OpenCV
+# Install system dependencies required by OpenCV, TensorFlow, etc.
 RUN apt-get update && apt-get install -y \
+    build-essential \
+    gcc \
     libgl1 \
     libglib2.0-0 \
+    git \
+    curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# ✅ Set working directory
+# Set working directory
 WORKDIR /app
 
-# ✅ Copy only requirements first to enable Docker caching
+# Copy requirements file first to leverage Docker caching
 COPY requirements.txt .
 
-# ✅ Install only extra packages not in base TensorFlow image
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ✅ Copy your project code AFTER installing packages
+# Copy project files
 COPY se_489_mlops_project/ se_489_mlops_project/
 COPY models/ models/
 COPY data/ data/
 
-# ✅ Expose Prometheus metrics port or API port
+# Expose Prometheus metrics port
 EXPOSE 8000
 
-# ✅ Run your prediction script (FastAPI or any other logic inside)
-ENTRYPOINT ["python", "-m", "se_489_mlops_project.predict"]
+# Debug: Show what's in models directory
+RUN echo "📂 Models directory contents:" && ls -alh /app/models
+
+# Change the entrypoint to run your predict.py script
+CMD ["python", "se_489_mlops_project/predict.py"]

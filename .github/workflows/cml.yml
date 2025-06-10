@@ -1,0 +1,60 @@
+name: CML
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements_dev.txt
+          pip install dvc[gdrive]
+
+      - name: Pull DVC data and model
+        env:
+          DVC_GDRIVE_CREDENTIALS: ${{ secrets.DVC_GDRIVE_CREDENTIALS }}
+        run: |
+          dvc pull models/sudoku_model.h5.dvc
+          dvc pull data/raw/sudoku-2.csv.dvc
+
+      - name: Evaluate model
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Run evaluation
+          python -m se_489_mlops_project.evaluate_model
+          
+          # Report metrics using CML
+          cml-publish metrics.json --title "Model Evaluation Metrics"
+          
+          # If you have plots or visualizations
+          cml-publish confusion_matrix.png --title "Confusion Matrix"
+          
+          # Publish the model file
+          cml-publish models/sudoku_model.h5 --title "Model File"
+
+      - name: Run tests
+        run: |
+          pytest tests/
+
+      - name: Create CML report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "## Model Evaluation Report" > report.md
+          echo "### Metrics" >> report.md
+          cat metrics.json >> report.md
+          echo "### Test Results" >> report.md
+          pytest --junitxml=report.xml
+          cml-publish report.md --title "Evaluation Report"

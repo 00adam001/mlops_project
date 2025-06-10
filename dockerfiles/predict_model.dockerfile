@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-# Install system dependencies required by OpenCV, TensorFlow, etc.
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
@@ -13,10 +13,8 @@ RUN apt-get update && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
-# Copy requirements file first to leverage Docker caching
+# Copy and install Python dependencies
 COPY requirements.txt .
-
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project files
@@ -24,11 +22,12 @@ COPY se_489_mlops_project/ se_489_mlops_project/
 COPY models/ models/
 COPY data/ data/
 
-# Expose Prometheus metrics port
+# Expose metrics port (Prometheus) and default Cloud Run port
 EXPOSE 8000
+EXPOSE 8080
 
-# Debug: Show what's in models directory
+# Debug: list model contents
 RUN echo "📂 Models directory contents:" && ls -alh /app/models
 
-# Change the entrypoint to run your predict.py script
-CMD ["python", "se_489_mlops_project/predict.py"]
+# Start the FastAPI server using Uvicorn
+CMD ["uvicorn", "se_489_mlops_project.predict:app", "--host", "0.0.0.0", "--port", "8080"]

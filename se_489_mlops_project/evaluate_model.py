@@ -2,9 +2,8 @@ import json
 import numpy as np
 from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+from sklearn.metrics import confusion_matrix, classification_report
 import seaborn as sns
-import os
 from se_489_mlops_project.data.data_preprocess import get_data
 
 SAMPLE_SIZE = 1000  # Number of rows to use for evaluation

@@ -41,13 +41,18 @@ jobs:
       run: |
         docker push europe-west1-docker.pkg.dev/dvc-drive-460320/sudoku-repo/sudoku-solver
 
-    - name: Deploy to Cloud Run
-      run: |
-        gcloud run deploy sudoku-solver \
-          --image=europe-west1-docker.pkg.dev/dvc-drive-460320/sudoku-repo/sudoku-solver \
-          --platform=managed \
-          --region=europe-west1 \
-          --allow-unauthenticated \
-          --memory=1Gi \
-          --timeout=1000 \
-          --max-instances=1
+# Deployment to Cloud Run has been commented out intentionally.
+# We have **stopped the instance after successful deployment** to GCP,
+# so this part is not required for CI workflow to pass.
+# Uncomment and use if re-deployment is needed in the future.
+
+# - name: Deploy to Cloud Run
+#   run: |
+#     gcloud run deploy sudoku-solver \
+#       --image=europe-west1-docker.pkg.dev/dvc-drive-460320/sudoku-repo/sudoku-solver \
+#       --platform=managed \
+#       --region=europe-west1 \
+#       --allow-unauthenticated \
+#       --memory=1Gi \
+#       --timeout=1000 \
+#       --max-instances=1

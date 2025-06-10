@@ -31,4 +31,4 @@ EXPOSE 8000
 RUN echo "📂 Models directory contents:" && ls -alh /app/models
 
 # ✅ Set module entrypoint
-ENTRYPOINT ["python", "-m", "se_489_mlops_project.predict"]
+ENTRYPOINT ["uvicorn", "se_489_mlops_project.main:app", "--host", "0.0.0.0", "--port", "8080"]

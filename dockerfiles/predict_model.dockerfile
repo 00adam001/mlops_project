@@ -1,34 +1,30 @@
+# Use Python base image
 FROM python:3.11-slim
 
-# Install system dependencies required by OpenCV, TensorFlow, etc.
+# Install system dependencies required by OpenCV
 RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
     libgl1 \
     libglib2.0-0 \
-    git \
-    curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy requirements file first to leverage Docker caching
+# Copy only requirements file first to leverage caching
 COPY requirements.txt .
 
-# ✅ Install Python dependencies
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ✅ Copy project files after dependencies (for caching efficiency)
+# Copy the rest of the project files
 COPY se_489_mlops_project/ se_489_mlops_project/
 COPY models/ models/
 COPY data/ data/
 
-# ✅ Expose Prometheus metrics port
-EXPOSE 8000
+# Debug: Confirm model directory (optional)
+RUN echo "📂 Models:" && ls -alh /app/models
 
-# ✅ Debug: Show what's in models directory (optional but helpful)
-RUN echo "📂 Models directory contents:" && ls -alh /app/models
-
-# ✅ Set module entrypoint
-ENTRYPOINT ["uvicorn", "se_489_mlops_project.main:app", "--host", "0.0.0.0", "--port", "8080"]
+# Run prediction module (without API or UI)
+ENTRYPOINT ["python", "-m", "se_489_mlops_project.predict"]

@@ -7,12 +7,19 @@ on:
     branches: [main]
 
 jobs:
-  run:
+  cml-report:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Set up Python and Node.js (for CML)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
 
       - name: Install dependencies
         run: |
@@ -20,38 +27,41 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements_dev.txt
           pip install dvc[gdrive]
+          npm install -g @dvcorg/cml
 
-      # NOTE: We are skipping DVC pull.
-      # The model was evaluated locally and metrics are stored in the repository.
-      #
-      # - name: Pull DVC data and model
-      #   env:
-      #     DVC_GDRIVE_CREDENTIALS: ${{ secrets.DVC_GDRIVE_CREDENTIALS }}
-      #   run: |
-      #     dvc pull models/sudoku_model.h5.dvc
-      #     dvc pull data/raw/sudoku-2.csv.dvc
-
-      - name: Evaluate model (pre-evaluated locally)
+      - name: Authenticate GCP and prepare credentials
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: gcp_key.json
         run: |
-          echo "Model already evaluated locally."
-          echo "Using pre-generated metrics.json and confusion_matrix.png."
+          echo "${{ secrets.GCP_SA_KEY }}" > gcp_key.json
+
+      - name: Pull DVC-tracked model and data
+        run: |
+          dvc pull models/sudoku_model.h5.dvc
+          dvc pull data/raw/sudoku-2.csv.dvc
+
+      - name: Run evaluation and generate metrics
+        run: |
+          python -m se_489_mlops_project.evaluate_model
 
       - name: Run tests
         run: |
           pytest tests/
 
-      - name: Install CML
-        run: npm install -g @dvcorg/cml
-
-      - name: Create CML report
+      - name: Create and publish CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "## Model Evaluation Report" > report.md
-          echo "### Metrics" >> report.md
-          cat metrics.json >> report.md
-          echo "### Confusion Matrix" >> report.md
+          echo "## 📊 Model Evaluation Report" > report.md
+          echo "### ✅ Metrics" >> report.md
+          cat metrics.json >> report.md || echo "metrics.json not found" >> report.md
+          echo "### 🖼️ Confusion Matrix" >> report.md
           echo "![Confusion Matrix](confusion_matrix.png)" >> report.md
-          echo "### Test Results" >> report.md
-          pytest --junitxml=report.xml
-          cml-publish report.md --title "Evaluation Report"
+          echo "### 🧪 Test Results" >> report.md
+          pytest --junitxml=report.xml >> report.md || echo "Tests failed" >> report.md
+
+          cml-publish report.md --md
+          cml-publish confusion_matrix.png --title "Confusion Matrix"
+
+      - name: Clean up GCP key
+        run: rm gcp_key.json

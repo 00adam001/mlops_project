@@ -4,11 +4,11 @@ from sklearn.model_selection import train_test_split
 from typing import Tuple
 from numpy.typing import NDArray
 
-def get_data(file: str) -> Tuple[
+def get_data(file: str, nrows: int = None) -> Tuple[
     NDArray[np.float32], NDArray[np.float32],
     NDArray[np.int64], NDArray[np.int64]
 ]:
-    data = pd.read_csv(file)
+    data = pd.read_csv(file, nrows=nrows)
 
     feat_raw = data['quizzes']
     label_raw = data['solutions']

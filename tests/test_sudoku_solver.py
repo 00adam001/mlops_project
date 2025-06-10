@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import cv2
-import pytest
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Flatten, Dense
 

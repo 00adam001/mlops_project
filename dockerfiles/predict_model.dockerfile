@@ -1,6 +1,6 @@
-FROM python:3.11-slim
+FROM --platform=linux/arm64 tensorflow/tensorflow:2.10.0
 
-# Install system dependencies required by OpenCV, TensorFlow, etc.
+# Install system dependencies required by OpenCV, etc.
 RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
@@ -10,25 +10,28 @@ RUN apt-get update && apt-get install -y \
     curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# Set working directory to the application's root within the project
 WORKDIR /app
 
-# Copy requirements file first to leverage Docker caching
-COPY requirements.txt .
+# Set pip timeout to a higher value
+ENV PIP_DEFAULT_TIMEOUT=1000
 
-# Install Python dependencies
+# Copy requirements file first to leverage Docker caching from the project root
+COPY requirements.txt ./
+
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project files
+# Copy project files from the project root to the new working directory
 COPY se_489_mlops_project/ se_489_mlops_project/
 COPY models/ models/
 COPY data/ data/
 
-# Expose Prometheus metrics port
-EXPOSE 8000
+# Expose the port for the Flask application
+EXPOSE 8080
 
-# Debug: Show what's in models directory
-RUN echo "📂 Models directory contents:" && ls -alh /app/models
+# Optional: Check directory contents for debugging
+# RUN echo "📂 Models directory contents:" && ls -alh models
 
-# Change the entrypoint to run your predict.py script
-CMD ["python", "se_489_mlops_project/predict.py"]
+# Change the entrypoint to run your Flask app.py using Gunicorn from the current WORKDIR
+CMD exec gunicorn --bind :8080 --workers 1 --threads 8 --timeout 0 se_489_mlops_project/app:app

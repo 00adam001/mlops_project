@@ -9,14 +9,14 @@ import mlflow
 from prometheus_client import start_http_server, Counter, Summary, Gauge
 from rich.logging import RichHandler
 from tensorflow.keras.models import load_model
-from se_489_mlops_project.puzzle_utils import find_puzzle, extract_digit
+from puzzle_utils import find_puzzle, extract_digit
 from tensorflow.keras.optimizers import Adam
 
 # ======================
 # Setup
 # ======================
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format="%(asctime)s | %(levelname)s | %(message)s",
     datefmt="[%X]",
     handlers=[RichHandler()]
@@ -53,11 +53,16 @@ def denorm(a):
     return (a + 0.5) * 9
 
 
-def load_digit_model(model_path='models/digit_model.h5'):
-    logger.info("Loading digit recognition model...")
-    model = load_model(model_path, compile=False)  # prevent loading outdated optimizer
-    model.compile(optimizer=Adam(), loss='categorical_crossentropy', metrics=['accuracy'])
-    return model
+def load_digit_model(model_path='../models/digit_model.h5'):
+    logger.info(f"Loading digit recognition model from: {model_path}")
+    try:
+        model = load_model(model_path, compile=False, custom_objects={'Adam': Adam})
+        model.compile(optimizer=Adam(learning_rate=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
+        logger.info("Digit recognition model loaded successfully.")
+        return model
+    except Exception as e:
+        logger.error(f"Error loading digit model from {model_path}: {str(e)}")
+        raise
 
 def identify_number(image, digit_model):
     image_resized = cv2.resize(image, (28, 28))
@@ -66,12 +71,19 @@ def identify_number(image, digit_model):
     prediction = digit_model.predict(image_final, verbose=0)
     return np.argmax(prediction, axis=1)[0]
 
-def inference_sudoku(board, model_path='models/sudoku_model.h5'):
-    board_norm = norm(board)
-    board_input = np.expand_dims(np.expand_dims(board_norm, axis=0), axis=-1)
-    model = load_model(model_path)
-    out = model.predict(board_input)
-    return np.argmax(out, axis=2).reshape((9, 9)) + 1
+def inference_sudoku(board, model_path='../models/sudoku_model.h5'):
+    logger.info(f"Loading Sudoku solving model from: {model_path}")
+    try:
+        board_norm = norm(board)
+        board_input = np.expand_dims(np.expand_dims(board_norm, axis=0), axis=-1)
+        model = load_model(model_path, compile=False, custom_objects={'Adam': Adam})
+        model.compile(optimizer=Adam(learning_rate=0.001), loss='sparse_categorical_crossentropy')
+        out = model.predict(board_input)
+        logger.info("Sudoku solving model loaded successfully.")
+        return np.argmax(out, axis=2).reshape((9, 9)) + 1
+    except Exception as e:
+        logger.error(f"Error in Sudoku inference from {model_path}: {str(e)}")
+        raise
 
 # ======================
 # Processing Function

@@ -21,15 +21,22 @@ jobs:
           pip install -r requirements_dev.txt
           pip install dvc[gdrive]
 
-      # NOTE: We are skipping DVC pull.
-      # The model was evaluated locally and metrics are stored in the repository.
-      #
-      # - name: Pull DVC data and model
-      #   env:
-      #     DVC_GDRIVE_CREDENTIALS: ${{ secrets.DVC_GDRIVE_CREDENTIALS }}
-      #   run: |
-      #     dvc pull models/sudoku_model.h5.dvc
-      #     dvc pull data/raw/sudoku-2.csv.dvc
+      - name: Setup DVC
+        env:
+          DVC_GDRIVE_CREDENTIALS: ${{ secrets.DVC_GDRIVE_CREDENTIALS }}
+        run: |
+          # Initialize DVC
+          dvc init
+          
+          # Configure DVC remote
+          dvc remote add -d myremote gdrive://1KU4L-nys2NnK9S9ii-dQGmKRhJXRUcRF
+          
+          # Configure DVC to use the remote
+          dvc config core.remote myremote
+          
+          # Pull the data and model
+          dvc pull models/sudoku_model.h5.dvc
+          dvc pull data/raw/sudoku-2.csv.dvc
 
       - name: Evaluate model (pre-evaluated locally)
         run: |
